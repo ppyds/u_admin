@@ -1,6 +1,6 @@
 <template>
   <div>
-    {{tableData}}
+    {{ tableData }}
     <el-table
       :data="tableData"
       style="width: 100%;margin-bottom: 20px;"
@@ -38,7 +38,7 @@
         sortable
         min-width="200">
         <template slot-scope="scope">
-<!--          {{scope.row.img}}-->
+          <!--          {{scope.row.img}}-->
           <img :src="'http://127.0.0.1:3000'+scope.row.img" alt="">
           <v-img :src="'http://127.0.0.1:3000/uploads/ba495e20-496f-11eb-a7bc-bd800f437adb.jpg'"></v-img>
         </template>
@@ -52,7 +52,7 @@
       <el-table-column label="是否热卖" min-width="100px">
         <template slot-scope="scope">
           <el-button type="primary" v-if="scope.row.ishot===1">是</el-button>
-          <el-button type="info" v-else>否 </el-button>
+          <el-button type="info" v-else>否</el-button>
         </template>
       </el-table-column>
       <el-table-column label="状态" min-width="100px">
@@ -68,7 +68,7 @@
         </template>
       </el-table-column>
     </el-table>
-    {{pages}}
+    {{ pages }}
     <el-pagination
       background
       layout="prev, pager, next"
@@ -90,20 +90,20 @@ export default {
   name: "vTable",
   methods: {
     ...mapActions({
-      "getList":"goods/getList",
-      "editOpen":"goods/editOpen",
-      "del":"goods/del",
-      "pageChange":"goods/pageChange"
+      "getList": "goods/getList",
+      "editOpen": "goods/editOpen",
+      "del": "goods/del",
+      "pageChange": "goods/pageChange"
     })
 
   },
-  components:{
+  components: {
     vImg
   },
-  computed:{
+  computed: {
     ...mapGetters({
-      "tableData":"goods/tableData",
-      "pages":"goods/pages",
+      "tableData": "goods/tableData",
+      "pages": "goods/pages",
     })
   },
   mounted() {
@@ -116,7 +116,7 @@ export default {
 /*.el-table::before{*/
 /*  height: 0;*/
 /*}*/
-img{
+img {
   width: 100px;
   height: 100px;
 }
