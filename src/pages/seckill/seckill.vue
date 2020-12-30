@@ -1,12 +1,20 @@
 <template>
   <div>
-      秒杀
+    秒杀
+    <v-form></v-form>
+    <v-table></v-table>
   </div>
 </template>
 
 <script>
-export default {
+import vForm from "./components/vForm";
+import vTable from "./components/vTable";
 
+export default {
+  components: {
+    vForm,
+    vTable
+  }
 }
 </script>
 

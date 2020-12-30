@@ -89,13 +89,11 @@ export default {
     close() {
       this.attrDataArr = []
     }
-
   },
   computed: {
     ...mapGetters({
       "form": "specs/form",
-      "isFormShow": "specs/isFormShow",
-
+      "isFormShow": "specs/isFormShow"
     }),
   },
   watch: {
@@ -112,7 +110,4 @@ export default {
 </script>
 
 <style scoped>
-/*^{*/
-/*  !*width: calc(100 - 20px);*!*/
-/*}*/
 </style>

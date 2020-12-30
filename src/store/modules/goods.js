@@ -6,26 +6,27 @@ import {
   removeSpecsListItem,
   setSpecsListItem,
   addGoodsListItem, getGoodsListLength,
-  getGoodsList, getGoodsListItem
+  getGoodsList, getGoodsListItem, setGoodsListItem
 } from "../../utils/http";
 import {errAlert, okAlert} from "../../utils/alert";
 import E from 'wangeditor'
 
+const form = {
+  first_cateid: "",
+  second_cateid: "",
+  goodsname: "",
+  price: "",
+  market_price: "",
+  img: "",
+  description: "",
+  specsid: "",
+  specsattr: "[]",
+  isnew: "",
+  ishot: "",
+  status: ""
+}
 let state = {
-  form: {
-    first_cateid: "",
-    second_cateid: "",
-    goodsname: "",
-    price: "",
-    market_price: "",
-    img: "",
-    description: "",
-    specsid: "",
-    specsattr: "[]",
-    isnew: "",
-    ishot: "",
-    status: ""
-  },
+  form,
   isFormShow: {
     show: false,
     add: true,
@@ -96,9 +97,11 @@ let actions = {
       }
     })
   },
-  formShow(context) {
+  formShow(context, bool) {
     const isFormShow = context.state.isFormShow;
     isFormShow.show = true;
+    isFormShow.add = bool;
+    isFormShow.name = "添加";
     context.commit("setIsFormShow", isFormShow);
   },
   showFalse(context) {
@@ -108,16 +111,19 @@ let actions = {
     context.dispatch("getList", context.state.pages)
 
   },
-  close() {
-
+  close(context) {
+    console.log(555555555, context.state.isFormShow.add)
+    if (!context.state.isFormShow.add) {
+      context.commit("setForm", form);
+    }
   },
-  open(context) {
-    context.dispatch("getCateList");
-    context.dispatch("getSpecsList");
+  async open(context) {
+    await context.dispatch("getCateList");
+    await context.dispatch("getSpecsList");
   },
-  editOpen(context, id) {
-    context.dispatch("getCateList");
-    context.dispatch("getSpecsList");
+  async editOpen(context, id) {
+    await context.dispatch("getCateList");
+    await context.dispatch("getSpecsList");
     context.commit("setIsFormShow", {
       show: true,
       add: false,
@@ -126,15 +132,20 @@ let actions = {
     getGoodsListItem(id)
       .then(res => {
         if (res.code === 200) {
-          console.log(res.list)
-          context.dispatch("formShow", context).then();
+          context.dispatch("formShow", false).then();
+          try {
+            res.list.specsattr = JSON.parse(res.list.specsattr);
+          } catch (e) {
+            res.list.specsattr = [];
+          }
+          res.list.id = id;
           context.commit("setForm", res.list);
         }
       });
   },
   edit(context, data) {
-    data.attrs = JSON.stringify(data.attrs);
-    setSpecsListItem(data)
+    delete data.attrs;
+    setGoodsListItem(data)
       .then(res => {
         if (res.code === 200) {
           okAlert(res.msg);
@@ -145,24 +156,21 @@ let actions = {
   add(context, data) {
     addGoodsListItem(data).then(res => {
       if (res.code === 200) {
-        okAlert(res.msgs)
+        okAlert(res.msg);
+        context.commit("setIsFormShow", {
+          show: false,
+          add: false,
+          name: "修改"
+        });
       }
     });
-    // data.attrs = JSON.stringify(data.attrs);
-    // addSpecsListItem(data).then(res => {
-    //   if (res.code === 200) {
-    //     okAlert(res.msg);
-    //     context.dispatch("showFalse", context).then();
-    //   }
-    // })
   },
   del(context, id) {
     removeSpecsListItem(id)
       .then(res => {
         if (res.code === 200) {
-          context.dispatch("getList", context.state.pages)
+          context.dispatch("getList", context.state.pages);
           okAlert(res.msg);
-
         }
       })
   },
@@ -190,14 +198,14 @@ let actions = {
           item.attrs = []
         }
       })
-      context.commit('setTableData', listData.list)
+      context.commit('setTableData', listData.list);
     }
   },
   pageChange(context, index) {
     const pages = context.state.pages;
     pages.page = index;
-    context.commit("setPages", pages)
-    context.dispatch("getList", context.state.pages)
+    context.commit("setPages", pages);
+    context.dispatch("getList", context.state.pages);
   }
 }
 

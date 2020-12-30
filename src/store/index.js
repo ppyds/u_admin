@@ -10,6 +10,7 @@ import login from "./modules/login";
 import cate from "./modules/cate";
 import specs from "./modules/specs";
 import goods from "./modules/goods";
+import seckill from "./modules/seckill";
 
 export default new Vuex.Store({
   state,
@@ -20,6 +21,7 @@ export default new Vuex.Store({
     login,
     cate,
     specs,
-    goods
+    goods,
+    seckill
   }
 })

@@ -265,4 +265,9 @@ export const getGoodsListItem = id =>axios({
     id
   }
 })
+export const setGoodsListItem = data => axios({
+  url:base + "/api/goodsedit",
+  method:"post",
+  data:dataToFormData(data)
+})
 

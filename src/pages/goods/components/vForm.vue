@@ -2,7 +2,7 @@
   <div class="form">
     <el-button
       type="primary"
-      @click="formShow"
+      @click="formShow(true)"
     >添加
     </el-button>
     <el-dialog
@@ -15,7 +15,7 @@
       :visible.sync="isFormShow.show"
     >
       <el-form :model="form">
-        <div>form:{{ form }}</div>
+        <div>form:{{ isFormShow }}</div>
 
         <el-form-item label="一级分类" label-width="100px">
           <el-select v-model="form.first_cateid">
@@ -55,7 +55,7 @@
           </div>
         </el-form-item>
         <el-form-item label="商品规格" label-width="100px">
-          <el-select v-model="form.specsid">@change="changegoodsId"
+          <el-select v-model="form.specsid">
             <el-option label="--请选择--" value disabled></el-option>
             <el-option
               v-for="item in goodsList"
@@ -93,7 +93,8 @@
                      @click="add({...form,'specsattr':JSON.stringify(form.specsattr),'description':editor.txt.html()})">
             添加
           </el-button>
-          <el-button type="primary" v-else @click="edit({...form,attrs:attrDataArr})">
+          <el-button type="primary" v-else
+                     @click="edit({...form,'specsattr':JSON.stringify(form.specsattr),'description':editor.txt.html()})">
             修改
           </el-button>
         </el-form-item>
@@ -111,8 +112,8 @@ export default {
   data() {
     return {
       width: '100px',
-      attrData: '',
-      attrDataArr: [],
+      attrData: '',//输入框正在输入的属性
+      attrDataArr: [],//属性数组合计
       secondCateList: [],
       showgoodsAttr: [],
       bgUrl: "",
@@ -125,7 +126,8 @@ export default {
       "add": "goods/add",
       "open": "goods/open",
       "edit": "goods/edit",
-      "getCateList": "goods/getCateList"
+      "getCateList": "goods/getCateList",
+      "close": "goods/close"
     }),
     addAttr() {
       this.attrDataArr.push(this.attrData);
@@ -133,24 +135,17 @@ export default {
     },
     removeAttr(index) {
       this.attrDataArr.splice(index, 1);
-      console.log(this.attrDataArr)
     },
     opened() {
       this.editor = new E('#div1')
       this.editor.create();
-      console.log(this.form.description)
       if (this.form.description) {
-
         this.editor.txt.html(this.form.description);
       }
-    },
-    close() {
-      this.attrDataArr = []
     },
     changeFile(e) {
       const file = e.target.files[0];
       this.bgUrl = URL.createObjectURL(file);
-
       this.form.img = file;
     }
 
@@ -165,9 +160,13 @@ export default {
   },
   watch: {
     "form.first_cateid"() {
-      this.secondCateList = this.cateList.find(item => {
-        return this.form.first_cateid === item.id;
-      }).children;
+      try{
+        this.secondCateList = this.cateList.find(item => {
+          return this.form.first_cateid === item.id;
+        }).children;
+      }catch (e){
+
+      }
     },
     "form.specsid"() {
       this.showgoodsAttr = this.goodsList.map(item => {
@@ -176,17 +175,11 @@ export default {
         }
       })[0];
     }
-  },
-  mounted() {
-
   }
 }
 </script>
 
 <style scoped>
-/*^{*/
-/*  !*width: calc(100 - 20px);*!*/
-/*}*/
 .file_box {
   width: 150px;
   height: 150px;
