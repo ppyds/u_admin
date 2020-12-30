@@ -20,6 +20,8 @@
 <script>
 
 
+import {mapActions} from "vuex";
+
 export default {
   name: "login",
   data() {
@@ -31,9 +33,9 @@ export default {
     }
   },
   methods: {
-    login(a) {
-      this.$router.push('/index')
-    }
+    ...mapActions({
+      "login":"login"
+    })
   }
 
 }

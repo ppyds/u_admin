@@ -11,38 +11,31 @@
       <i class="el-icon-menu"></i>
       <span slot="title">首页</span>
     </el-menu-item>
-
-    <el-submenu index="1">
-      <template slot="title">
-        <i class="el-icon-location"></i>
-        <span>系统设置</span>
-      </template>
-      <el-menu-item-group>
-        <el-menu-item index="/index/menu">菜单管理</el-menu-item>
-        <el-menu-item index="/index/role">角色管理</el-menu-item>
-        <el-menu-item index="/index/manage">管理员管理</el-menu-item>
-      </el-menu-item-group>
-    </el-submenu>
-    <el-submenu index="3">
-      <template slot="title">
-        <i class="el-icon-location"></i>
-        <span>商城管理</span>
-      </template>
-      <el-menu-item-group>
-        <el-menu-item index="/index/cate">商品分类</el-menu-item>
-        <el-menu-item index="/index/specs">商品规格</el-menu-item>
-        <el-menu-item index="/index/goods">商品管理</el-menu-item>
-        <el-menu-item index="/index/member">会员管理</el-menu-item>
-        <el-menu-item index="/index/banner">轮播图管理</el-menu-item>
-        <el-menu-item index="/index/seckill">秒杀活动</el-menu-item>
-      </el-menu-item-group>
-    </el-submenu>
+    <div  v-for="item in userInfo.menus">
+      <el-submenu :index="item.url" v-if="item.children">
+        <template slot="title">
+          <i class="el-icon-location"></i>
+          <span>{{ item.title }}</span>
+        </template>
+        <el-menu-item-group>
+          <el-menu-item v-for="i in item.children" :index="'/index/'+ i.url">{{ i.title }}</el-menu-item>
+        </el-menu-item-group>
+      </el-submenu>
+      <el-menu-item v-else  :index="'/index/'+ item.url">{{ item.title }}</el-menu-item>
+    </div>
   </el-menu>
 </template>
 
 <script>
+import {mapGetters} from "vuex";
+
 export default {
-name: "left"
+name: "left",
+  computed:{
+  ...mapGetters({
+    "userInfo":"userInfo"
+  })
+  }
 }
 </script>
 

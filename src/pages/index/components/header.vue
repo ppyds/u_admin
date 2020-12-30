@@ -4,10 +4,16 @@
       <el-breadcrumb-item :to="{ path: '/index' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item>{{ $route.name }}</el-breadcrumb-item>
     </el-breadcrumb>
+    <div>
+      {{ userInfo.username }}
+    </div>
+    <el-button type="danger" @click="loginOut">推出</el-button>
   </div>
 </template>
 
 <script>
+import {mapActions, mapGetters} from "vuex";
+
 export default {
   name: "header",
   data() {
@@ -19,6 +25,16 @@ export default {
     this.title = to.name;
     console.log(this.title)
     next()
+  },
+  computed: {
+    ...mapGetters({
+      "userInfo": "userInfo"
+    })
+  },
+  methods: {
+    ...mapActions({
+      loginOut: "loginOut"
+    })
   }
 }
 </script>
@@ -27,5 +43,10 @@ export default {
 .header {
   height: 100%;
   background: #b7c2e9;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 25px;
+  padding: 0 50px;
 }
 </style>

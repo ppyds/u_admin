@@ -5,31 +5,26 @@ import {errAlert} from "./alert";
 import {formatDate} from "element-ui/src/utils/date-util";
 import Vue from "vue";
 
+import store from "../store"
+
 Vue.prototype.URL = 'http://localhost:3000'
 const base = "/api";
 
 
-// const ajax = (obj) =>
-//   new Promise(((resolve, reject) => {
-//     obj.success = function (data) {
-//       resolve(data);
-//     }
-//     obj.error = function (err) {
-//       reject(err);
-//     }
-//     $.axios(obj);
-//   }));
-
-
 axios.interceptors.response.use(res => {
-  // console.group("本次请求地址是：" + res.config.url)
-  console.log(res);
-  console.groupEnd()
   //18.统一处理失败
   if (res.data.code !== 200) {
     errAlert(res.data.msg)
   }
+  console.log(res.data)
   return res.data
+})
+
+axios.interceptors.request.use(config => {
+  if (config.url !== base + "/api/userlogin") {
+    config.headers.authorization = store.state.userInfo.token
+  }
+  return config
 })
 
 export const getMenuList = () => axios({
@@ -309,5 +304,13 @@ export const delSeckillListItem = id => axios({
   data: qs.stringify({
     id
   })
+})
+
+
+//登录--------------------------------------------------------------------
+export const login = data => axios({
+  url: base + "/api/userlogin",
+  method: "post",
+  data: data
 })
 
