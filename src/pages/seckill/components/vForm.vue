@@ -8,14 +8,12 @@
     <el-dialog
       width="500px"
       @close="close"
-      @opened="opened"
       @open="open"
       class="alert"
       :title="isFormShow.name"
       :visible.sync="isFormShow.show"
     >
-      <el-form :model="form">
-        <div>form:{{ form }}</div>
+      <el-form v-if="form" :model="form">
         <el-form-item label="活动名称" label-width="100px">
           <el-input v-model="form.title"></el-input>
         </el-form-item>
@@ -55,9 +53,9 @@
           <el-select v-model="form.goodsid">
             <el-option label="--请选择商品--" value disabled></el-option>
             <el-option
-              v-for="item in cateList"
+              v-for="item in goodsList"
               :key="item.id"
-              :label="item.catename"
+              :label="item.goodsname"
               :value="item.id"
             ></el-option>
           </el-select>
@@ -67,11 +65,11 @@
         </el-form-item>
         <el-form-item label="" :label-width="width">
           <el-button type="primary" v-if="isFormShow.add"
-                     @click="add({...form,'specsattr':JSON.stringify(form.specsattr),'description':editor.txt.html()})">
+                     @click="add({...form,begintime:  Date.parse(String(value[0])),endtime:  Date.parse(String(value[1]))})">
             添加
           </el-button>
           <el-button type="primary" v-else
-                     @click="edit({...form,'specsattr':JSON.stringify(form.specsattr),'description':editor.txt.html()})">
+                     @click="edit({...form,begintime:  Date.parse(String(value[0])),endtime:  Date.parse(String(value[1]))})">
             修改
           </el-button>
         </el-form-item>
@@ -90,30 +88,27 @@ export default {
     return {
       width: '100px',
       secondCateList: [],
-      value: [new Date(2016, 9, 10, 8, 40), new Date(2016, 9, 10, 9, 40)],
+      value: [new Date(), new Date()],
       goods: []
     }
   },
   methods: {
     ...mapActions({
-      "formShow": "goods/formShow",
-      "add": "goods/add",
-      "open": "goods/open",
-      "edit": "goods/edit",
-      "getCateList": "goods/getCateList",
-      "close": "goods/close"
-    }),
-    opened() {
-
-    }
-
+      "formShow": "seckill/formShow",
+      "add": "seckill/add",
+      "open": "seckill/open",
+      "edit": "seckill/edit",
+      "getCateList": "seckill/getCateList",
+      "close": "seckill/close",
+      "getGoodsList": "seckill/getGoodsList"
+    })
   },
   computed: {
     ...mapGetters({
       "form": "seckill/form",
       "isFormShow": "seckill/isFormShow",
-      "cateList": "goods/cateList",
-      "goodsList": "goods/goodsList"
+      "cateList": "seckill/cateList",
+      "goodsList": "seckill/goodsList"
     }),
   },
   watch: {
@@ -121,6 +116,15 @@ export default {
       this.secondCateList = this.cateList.find(item => {
         return this.form.first_cateid === item.id;
       }).children;
+    },
+    "form.second_cateid"() {
+      this.getGoodsList(this.form.second_cateid);
+    },
+    "form.begintime"() {
+      this.value = [new Date(this.form.begintime), new Date(this.form.endtime)];
+    },
+    "form.endtime"() {
+      this.value = [new Date(parseInt(this.form.begintime)), new Date(parseInt(this.form.endtime))];
     }
   }
 }

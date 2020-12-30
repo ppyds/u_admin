@@ -245,29 +245,69 @@ export const removeSpecsListItem = id => axios({
 });
 // 商品分类
 export const addGoodsListItem = data => axios({
-  url:base + "/api/goodsadd",
-  method:"post",
-  data:dataToFormData(data)
+  url: base + "/api/goodsadd",
+  method: "post",
+  data: dataToFormData(data)
 })
-export const getGoodsListLength = () =>axios({
-  url:base + "/api/goodscount",
-  method:"get"
+export const getGoodsListLength = () => axios({
+  url: base + "/api/goodscount",
+  method: "get"
 })
-export const getGoodsList = params =>axios({
-  url:base +"/api/goodslist",
-  method:"get",
+export const getGoodsList = params => axios({
+  url: base + "/api/goodslist",
+  method: "get",
   params
 })
-export const getGoodsListItem = id =>axios({
-  url:base +"/api/goodsinfo",
-  method:"get",
-  params:{
+export const getGoodsListItem = id => axios({
+  url: base + "/api/goodsinfo",
+  method: "get",
+  params: {
     id
   }
 })
 export const setGoodsListItem = data => axios({
-  url:base + "/api/goodsedit",
-  method:"post",
-  data:dataToFormData(data)
+  url: base + "/api/goodsedit",
+  method: "post",
+  data: dataToFormData(data)
+})
+
+//限时秒杀
+export const getInfoGoodsList = fid => axios({
+  url: base + "/api/getgoods",
+  method: "get",
+  params: {
+    fid
+  }
+});
+export const addSeckillListItem = data => axios({
+  url: base + "/api/seckadd",
+  method: "post",
+  data: qs.stringify(data)
+});
+
+export const getSeckillList = () => axios({
+  url: base + "/api/secklist",
+  method: "get"
+});
+
+export const getSeckillListItem = id => axios({
+  url: base + "/api/seckinfo",
+  method: "get",
+  params: {
+    id
+  }
+});
+
+export const setSeckillListItem = data => axios({
+  url: base + "/api/seckedit",
+  method: "post",
+  data: qs.stringify(data)
+})
+export const delSeckillListItem = id => axios({
+  url: base + "/api/seckdelete",
+  method: "post",
+  data: qs.stringify({
+    id
+  })
 })
 
