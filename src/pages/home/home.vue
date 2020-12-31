@@ -4,17 +4,17 @@
   </div>
 </template>
 <script>
-import { mapGetters, mapActions } from "vuex";
+import {mapGetters, mapActions} from "vuex";
 
 export default {
   computed: {
     ...mapGetters({
-      list: "cate/list"
+      list: "goods/cateList"
     })
   },
   methods: {
     ...mapActions({
-      reqList: "cate/reqList"
+      reqList: "goods/getCateList"
     })
   },
   mounted() {
@@ -42,7 +42,7 @@ export default {
               data: ["分类数量"]
             },
             xAxis: {
-              data:this.list.map(item=>item.catename)
+              data: this.list.map(item => item.catename)
             },
             yAxis: {},
             // series:数据
@@ -50,7 +50,7 @@ export default {
               {
                 name: "分类数量",
                 type: "bar",
-                data: this.list.map(item=>item.children?item.children.length:0)
+                data: this.list.map(item => item.children ? item.children.length : 0)
               },
             ]
           };

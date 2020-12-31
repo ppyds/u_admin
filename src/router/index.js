@@ -48,6 +48,11 @@ export const indexRoutes = [
     component: () => import("../pages/seckill/seckill.vue"),
     name: "秒杀活动"
   },
+  {
+    path: "",
+    component: () => import("../pages/home/home.vue"),
+    name: "秒杀活动"
+  }
 ]
 Vue.use(Router);
 
