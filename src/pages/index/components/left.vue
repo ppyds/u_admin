@@ -14,7 +14,7 @@
     <div  v-for="item in userInfo.menus">
       <el-submenu :index="item.url" v-if="item.children">
         <template slot="title">
-          <i class="el-icon-location"></i>
+          <i :class="item.icon"></i>
           <span>{{ item.title }}</span>
         </template>
         <el-menu-item-group>
