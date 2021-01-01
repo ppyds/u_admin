@@ -25,7 +25,7 @@ axios.interceptors.request.use(async config => {
   //统一删除确认
   if (config.url.includes("del")) {
     const res = await confirm("此操作将永久删除该条数据, 是否删除");
-    if (res[1]) {//此处return 一个 Promise实例 是为了防止 axios 报错
+    if (res[0]) {//此处return 一个 Promise实例 是为了防止 axios 报错
       return new Promise(() => 5);
     }
   }
@@ -60,13 +60,20 @@ export const editMenuListItem = data => axios({
   data
 });
 
+// 角色
 export const addRoleListItem = data => axios({
   url: base + "/api/roleadd",
   method: "post",
   data
 });
 
-
+export const getRoleListItem = id => axios({
+  url: base + "/api/roleinfo",
+  method: "get",
+  params: {
+    id
+  }
+})
 //会员-----------------------------------------------------------------------------------
 export const getRoleList = () => axios({
   url: base + "/api/rolelist",

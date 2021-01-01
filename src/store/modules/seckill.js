@@ -22,7 +22,7 @@ const form = {
     show: false,
     add: true,
     name: "添加"
-  }
+  };
 let state = {
   form,
   isFormShow,
@@ -84,35 +84,34 @@ let actions = {
     })
   },
   formShow(context, bool) {
-    const isFormShow = context.state.isFormShow;
-    isFormShow.show = true;
-    isFormShow.add = bool;
-    isFormShow.name = "添加";
-    context.commit("setIsFormShow", isFormShow);
+    context.commit("setIsFormShow", {
+      show: true,
+      add: bool,
+      name: "添加"
+    });
   },
   add(context, data) {
-    addSeckillListItem(data).then(res => {
-      if (res.code === 200) {
-        okAlert(res.msg);
-        context.commit("setIsFormShow", {
-          show: false,
-          add: false,
-          name: "修改"
-        });
-        context.commit("setTableData", res.list);
-        context.commit("setForm", form);
-      }
-    });
+    addSeckillListItem(data)
+      .then(res => {
+        if (res.code === 200) {
+          okAlert(res.msg);
+          context.commit("setIsFormShow", {
+            show: false,
+            add: false,
+            name: "修改"
+          });
+          context.commit("setTableData", res.list);
+          context.commit("setForm", form);
+        }
+      });
   },
   async getTableData(context) {
     let res = await getSeckillList();
     if (res.code === 200) {
-      okAlert(res.msg);
       context.commit("setTableData", res.list);
     }
   },
   edit(context, data) {
-    console.log(data)
     delete data.attrs;
     setSeckillListItem(data)
       .then(res => {
@@ -152,7 +151,7 @@ let actions = {
       .then(res => {
         if (res.code === 200) {
           res.list.id = id;
-          context.dispatch("formShow", false).then();
+          context.dispatch("formShow", false);
           context.commit("setForm", res.list);
         }
       });

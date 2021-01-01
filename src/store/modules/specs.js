@@ -104,7 +104,7 @@ let actions = {
         okAlert(res.msg);
         context.dispatch("showFalse", context).then();
       }
-    })
+    });
   },
   del(context, id) {
     removeSpecsListItem(id)
@@ -112,9 +112,8 @@ let actions = {
         if (res.code === 200) {
           context.dispatch("getList", context.state.pages)
           okAlert(res.msg);
-
         }
-      })
+      });
   },
   async getList(context, pages) {
     // 获取总数量
@@ -125,8 +124,6 @@ let actions = {
       const data = context.state.pages;
       data.listLength = listLength.list[0].total;
       context.commit('setPages', data);
-    } else {
-      errAlert('网络错误,请稍后再试');
     }
     // 请求列表数据
     const listData = await getSpecsList(pages);
@@ -138,9 +135,6 @@ let actions = {
           page: pages.page - 1
         });
         await context.dispatch("getList", context.state.pages);
-        if (pages.page > 1){
-          return
-        }
       }
       // 数据赋值
       // 由于前端要的是数组 所以要转车数组

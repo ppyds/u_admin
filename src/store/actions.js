@@ -1,6 +1,6 @@
-import {okAlert} from "../utils/alert";
-import {login} from "../utils/http";
-import $router from "../router"
+import {confirm, okAlert} from "../utils/alert";
+import {getRoleListItem, login} from "../utils/http";
+import $router from "../router";
 
 export let actions = {
   async login(context, data) {
@@ -8,12 +8,18 @@ export let actions = {
     if (res.code === 200) {
       okAlert(res.msg);
       context.commit("setUserInfo", res.list);
+      const juese = await getRoleListItem(res.list.roleid);
+      res.list.juese = juese.list;
       window.sessionStorage.setItem("userInfo", JSON.stringify(res.list));
-      $router.push('/index');
+      context.commit("setUserInfo", res.list);
+      await $router.push('/index');
     }
   },
   async loginOut() {
-    await window.sessionStorage.removeItem("userInfo");
-    await $router.push('/login');
+    const res = await confirm('确定要退出吗');
+    if (res[1]) {
+      await window.sessionStorage.removeItem("userInfo");
+      await $router.push('/login');
+    }
   }
 }

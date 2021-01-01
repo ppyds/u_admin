@@ -23,9 +23,9 @@ export const confirm = msg =>
       cancelButtonText: '取消',
       type: 'warning'
     }).then(() => {
-      res([true, false])
-    }).catch(() => {
       res([false, true])
+    }).catch(() => {
+      res([true, false])
     })
   );
 

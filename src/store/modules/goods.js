@@ -112,7 +112,6 @@ let actions = {
 
   },
   close(context) {
-    console.log(555555555, context.state.isFormShow.add)
     if (!context.state.isFormShow.add) {
       context.commit("setForm", form);
     }
