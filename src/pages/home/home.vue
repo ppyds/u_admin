@@ -1,7 +1,7 @@
 <template>
-  <div>
-    <div id="main"></div>
-  </div>
+    <div class="box">
+      <div id="main"></div>
+    </div>
 </template>
 <script>
 import {mapGetters, mapActions} from "vuex";
@@ -60,14 +60,21 @@ export default {
       },
       deep: true
     }
-  }
+  },
+
 };
 </script>
 <style scoped>
+.box{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 #main {
-  width: 80%;
-  height: 500px;
-  border: 1px solid orange;
-  margin: 20px auto;
+  width: 800px;
+  height: 400px;
+  margin: auto;
+  padding: 0;
+  box-shadow:#ccc 0 0 50px 0 ;
 }
 </style>

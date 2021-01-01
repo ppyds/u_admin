@@ -6,7 +6,7 @@ import {
   removeSpecsListItem,
   setSpecsListItem,
   addGoodsListItem, getGoodsListLength,
-  getGoodsList, getGoodsListItem, setGoodsListItem
+  getGoodsList, getGoodsListItem, setGoodsListItem, delGoodsListItem
 } from "../../utils/http";
 import {errAlert, okAlert} from "../../utils/alert";
 import E from 'wangeditor'
@@ -162,11 +162,12 @@ let actions = {
           add: false,
           name: "修改"
         });
+        context.dispatch("getList", context.state.pages);
       }
     });
   },
   del(context, id) {
-    removeSpecsListItem(id)
+    delGoodsListItem(id)
       .then(res => {
         if (res.code === 200) {
           context.dispatch("getList", context.state.pages);
@@ -188,6 +189,18 @@ let actions = {
     }
     // 请求列表数据
     const listData = await getGoodsList(pages);
+    if (listData.code === 200) {
+      if (listData.list.length <= 0 && pages.page > 1) {//如果删除的是当前页的最后一项则跳转到前一页
+        context.commit("setPages", {
+          ...pages,
+          page: pages.page - 1
+        });
+        await context.dispatch("getList", context.state.pages);
+        if (pages.page > 1){
+          return
+        }
+      }
+    }
     // 数据赋值
     if (listData.code === 200) {
       // 由于前端要的是数组 所以要转车数组

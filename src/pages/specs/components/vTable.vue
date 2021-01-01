@@ -40,7 +40,7 @@
         </template>
       </el-table-column>
     </el-table>
-    {{pages}}
+    {{tableData}}
     <el-pagination
       background
       layout="prev, pager, next"

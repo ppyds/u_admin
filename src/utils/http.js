@@ -1,10 +1,9 @@
 import axios from "axios";
 import qs from "qs";
-import $ from 'jquery';
 import {errAlert} from "./alert";
-import {formatDate} from "element-ui/src/utils/date-util";
 import Vue from "vue";
 
+import {confirm} from "./alert"
 import store from "../store"
 
 Vue.prototype.URL = 'http://localhost:3000'
@@ -16,15 +15,21 @@ axios.interceptors.response.use(res => {
   if (res.data.code !== 200) {
     errAlert(res.data.msg)
   }
-  console.log(res.data)
   return res.data
 })
 
-axios.interceptors.request.use(config => {
+axios.interceptors.request.use(async config => {
   if (config.url !== base + "/api/userlogin") {
     config.headers.authorization = store.state.userInfo.token
   }
-  return config
+  //统一删除确认
+  if (config.url.includes("del")) {
+    const res = await confirm("此操作将永久删除该条数据, 是否删除");
+    if (res[1]) {//此处return 一个 Promise实例 是为了防止 axios 报错
+      return new Promise(() => 5);
+    }
+  }
+  return config;
 })
 
 export const getMenuList = () => axios({
@@ -122,7 +127,7 @@ const dataToFormData = (data) => {
     if (data.hasOwnProperty(dataKey))
       formData.append(dataKey, data[dataKey]);
   }
-  return formData
+  return formData;
 }
 
 export const addCateListItem = data => {
@@ -167,7 +172,7 @@ export const addBannerListItem = data => axios({
 
 export const getBannerList = () => axios({
   url: base + "/api/bannerlist",
-  method: "get",
+  method: "get"
 });
 export const delBannerListItem = id => axios({
   url: base + "/api/bannerdelete",
@@ -185,7 +190,7 @@ export const setBannerListItem = data => axios({
 //会员管理
 export const getMemberList = () => axios({
   url: base + "/api/memberlist",
-  method: "get",
+  method: "get"
 });
 
 export const setMemberListItem = data => axios({
@@ -266,6 +271,13 @@ export const setGoodsListItem = data => axios({
   data: dataToFormData(data)
 })
 
+export const delGoodsListItem = id => axios({
+  url: base + "/api/goodsdelete",
+  method: "post",
+  data: qs.stringify({
+    id
+  })
+});
 //限时秒杀
 export const getInfoGoodsList = fid => axios({
   url: base + "/api/getgoods",
@@ -297,14 +309,14 @@ export const setSeckillListItem = data => axios({
   url: base + "/api/seckedit",
   method: "post",
   data: qs.stringify(data)
-})
+});
 export const delSeckillListItem = id => axios({
   url: base + "/api/seckdelete",
   method: "post",
   data: qs.stringify({
     id
   })
-})
+});
 
 
 //登录--------------------------------------------------------------------

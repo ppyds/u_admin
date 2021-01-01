@@ -15,3 +15,18 @@ export const errAlert = message =>
     message,
     type: "warning"
   })
+// 警告弹窗
+export const confirm = msg =>
+  new Promise((res, reg) =>
+    vm.$confirm(msg, '提示', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning'
+    }).then(() => {
+      res([true, false])
+    }).catch(() => {
+      res([false, true])
+    })
+  );
+
+
